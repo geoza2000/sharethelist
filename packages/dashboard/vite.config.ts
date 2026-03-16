@@ -8,7 +8,7 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['logo.svg'],
+      includeAssets: ['logo.svg', 'favicon.ico', 'apple-touch-icon.png'],
       manifest: {
         name: 'Supermarket List',
         short_name: 'supermarket-list',
