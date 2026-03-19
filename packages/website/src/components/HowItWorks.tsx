@@ -29,7 +29,10 @@ export default function HowItWorks() {
   const { ref, isVisible } = useScrollAnimation();
 
   return (
-    <section id="how-it-works" className="py-20 md:py-28">
+    <section
+      id="how-it-works"
+      className="scroll-mt-24 md:scroll-mt-28 py-20 md:py-28"
+    >
       <div className="section-container" ref={ref}>
         <div className={`text-center max-w-2xl mx-auto mb-14 animate-on-scroll ${isVisible ? 'visible' : ''}`}>
           <span className="text-sm font-semibold text-brand-600 uppercase tracking-widest">

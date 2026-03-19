@@ -1,5 +1,6 @@
 import { Github } from 'lucide-react';
 import { APP_URL, GITHUB_URL } from '@/config/constants';
+import { scrollToSection } from '@/utils/scrollToSection';
 
 export default function Footer() {
   const year = new Date().getFullYear();
@@ -16,10 +17,24 @@ export default function Footer() {
           </div>
 
           <nav className="flex items-center gap-6 text-sm text-surface-900/50">
-            <a href="#features" className="hover:text-brand-600 transition-colors">
+            <a
+              href="#features"
+              onClick={(e) => {
+                e.preventDefault();
+                scrollToSection('features');
+              }}
+              className="hover:text-brand-600 transition-colors"
+            >
               Features
             </a>
-            <a href="#how-it-works" className="hover:text-brand-600 transition-colors">
+            <a
+              href="#how-it-works"
+              onClick={(e) => {
+                e.preventDefault();
+                scrollToSection('how-it-works');
+              }}
+              className="hover:text-brand-600 transition-colors"
+            >
               How It Works
             </a>
             <a

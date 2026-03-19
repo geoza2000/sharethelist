@@ -51,7 +51,10 @@ export default function Features() {
   const { ref, isVisible } = useScrollAnimation();
 
   return (
-    <section id="features" className="py-20 md:py-28 bg-surface-50/50">
+    <section
+      id="features"
+      className="scroll-mt-24 md:scroll-mt-28 py-20 md:py-28 bg-surface-50/50"
+    >
       <div className="section-container" ref={ref}>
         <div className={`text-center max-w-2xl mx-auto mb-14 animate-on-scroll ${isVisible ? 'visible' : ''}`}>
           <span className="text-sm font-semibold text-brand-600 uppercase tracking-widest">

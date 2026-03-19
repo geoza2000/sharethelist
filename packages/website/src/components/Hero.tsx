@@ -1,21 +1,25 @@
 import { ArrowRight, Sparkles } from 'lucide-react';
 import { APP_URL } from '@/config/constants';
+import { scrollToSection } from '@/utils/scrollToSection';
 
 const APP_SCREENSHOT = '/app.webp';
 
 export default function Hero() {
   return (
-    <section className="relative min-h-[100svh] flex items-center overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] rounded-full bg-gradient-to-br from-brand-100/60 via-brand-50/30 to-transparent blur-3xl" />
-        <div className="absolute bottom-0 right-0 w-[600px] h-[600px] rounded-full bg-gradient-to-tl from-brand-200/30 to-transparent blur-3xl animate-pulse-soft" />
-        <div className="absolute top-1/4 left-10 w-3 h-3 rounded-full bg-brand-400/40 animate-float" />
-        <div className="absolute top-1/3 right-20 w-2 h-2 rounded-full bg-brand-300/50 animate-float-delayed" />
-        <div className="absolute bottom-1/3 left-1/4 w-4 h-4 rounded-full bg-brand-200/40 animate-float" />
+    <section className="relative min-h-[100svh] flex items-center overflow-hidden isolate">
+      {/* Background decoration — pointer-events-none so blobs never steal taps/clicks */}
+      <div
+        className="absolute inset-0 -z-10 pointer-events-none"
+        aria-hidden
+      >
+        <div className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] rounded-full bg-gradient-to-br from-brand-100/60 via-brand-50/30 to-transparent blur-3xl" />
+        <div className="pointer-events-none absolute bottom-0 right-0 w-[600px] h-[600px] rounded-full bg-gradient-to-tl from-brand-200/30 to-transparent blur-3xl animate-pulse-soft" />
+        <div className="pointer-events-none absolute top-1/4 left-10 w-3 h-3 rounded-full bg-brand-400/40 animate-float" />
+        <div className="pointer-events-none absolute top-1/3 right-20 w-2 h-2 rounded-full bg-brand-300/50 animate-float-delayed" />
+        <div className="pointer-events-none absolute bottom-1/3 left-1/4 w-4 h-4 rounded-full bg-brand-200/40 animate-float" />
       </div>
 
-      <div className="section-container pt-24 pb-16 md:pt-32 md:pb-24">
+      <div className="section-container relative z-10 pt-24 pb-16 md:pt-32 md:pb-24">
         <div className="max-w-4xl mx-auto text-center">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-50 border border-brand-200/60 text-brand-700 text-sm font-medium mb-8 animate-fade-up">
             <Sparkles size={16} className="text-brand-500" />
@@ -49,6 +53,10 @@ export default function Hero() {
             </a>
             <a
               href="#features"
+              onClick={(e) => {
+                e.preventDefault();
+                scrollToSection('features');
+              }}
               className="inline-flex items-center gap-2 px-8 py-4 rounded-full text-base font-semibold text-surface-900/70 bg-surface-100 hover:bg-surface-200 transition-all"
             >
               See Features
@@ -75,7 +83,10 @@ export default function Hero() {
               </div>
             </div>
             {/* Glow effect behind phone */}
-            <div className="absolute inset-0 -z-10 bg-gradient-to-b from-brand-200/40 via-brand-100/20 to-transparent rounded-full blur-3xl scale-150" />
+            <div
+              className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-brand-200/40 via-brand-100/20 to-transparent rounded-full blur-3xl scale-150"
+              aria-hidden
+            />
           </div>
         </div>
       </div>

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Menu, X, Github } from 'lucide-react';
 import { APP_URL, GITHUB_URL } from '@/config/constants';
+import { scrollToSection } from '@/utils/scrollToSection';
 
 const NAV_LINKS = [
   { label: 'Features', href: '#features' },
@@ -39,6 +40,10 @@ export default function Navbar() {
             <a
               key={link.href}
               href={link.href}
+              onClick={(e) => {
+                e.preventDefault();
+                scrollToSection(link.href.slice(1));
+              }}
               className="text-sm font-medium text-surface-900/70 hover:text-brand-600 transition-colors"
             >
               {link.label}
@@ -79,7 +84,11 @@ export default function Navbar() {
               <a
                 key={link.href}
                 href={link.href}
-                onClick={() => setMobileOpen(false)}
+                onClick={(e) => {
+                  e.preventDefault();
+                  scrollToSection(link.href.slice(1));
+                  setMobileOpen(false);
+                }}
                 className="py-2 text-sm font-medium text-surface-900/70 hover:text-brand-600 transition-colors"
               >
                 {link.label}

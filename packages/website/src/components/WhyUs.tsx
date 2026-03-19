@@ -28,7 +28,10 @@ export default function WhyUs() {
   const { ref, isVisible } = useScrollAnimation();
 
   return (
-    <section id="why-us" className="py-20 md:py-28 bg-surface-900 text-white relative overflow-hidden">
+    <section
+      id="why-us"
+      className="scroll-mt-24 md:scroll-mt-28 py-20 md:py-28 bg-surface-900 text-white relative overflow-hidden"
+    >
       {/* Background decorations */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-brand-600/10 rounded-full blur-3xl" />
       <div className="absolute bottom-0 left-0 w-80 h-80 bg-brand-500/10 rounded-full blur-3xl" />
