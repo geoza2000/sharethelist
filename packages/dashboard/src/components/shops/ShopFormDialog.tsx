@@ -52,7 +52,7 @@ export function ShopFormDialog({
             {isEditing ? 'Edit Shop' : 'Add Shop'}
           </ResponsiveDialogTitle>
         </ResponsiveDialogHeader>
-        <div className="space-y-4">
+        <div className="min-h-0 flex-1 overflow-y-auto space-y-4">
           <div className="space-y-2">
             <Label htmlFor="shop-name">Name</Label>
             <Input

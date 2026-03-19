@@ -60,7 +60,7 @@ function ResponsiveDialogContent({
   }
 
   return (
-    <DrawerContent className={cn('px-4 pb-6', className)}>
+    <DrawerContent className={cn('max-h-[85vh] px-4 pb-6', className)}>
       {children}
     </DrawerContent>
   );
