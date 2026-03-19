@@ -173,7 +173,7 @@ export function ShoppingListPage() {
         </div>
       </header>
 
-      <main className="flex-1 p-4 pb-20 max-w-lg mx-auto w-full">
+      <main className="flex-1 p-4 pb-28 max-w-lg mx-auto w-full">
         {loading ? (
           <div className="space-y-3">
             {Array.from({ length: 5 }).map((_, i) => (

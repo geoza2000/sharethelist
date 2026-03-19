@@ -15,7 +15,7 @@ interface QuickAddBarProps {
   onOpenFullForm: (prefillName?: string) => void;
 }
 
-const MAX_CHIPS = 20;
+const MAX_CHIPS = 30;
 const MAX_SEARCH_RESULTS = 8;
 
 export function QuickAddBar({
@@ -28,7 +28,7 @@ export function QuickAddBar({
   const [query, setQuery] = useState('');
   const [isFocused, setIsFocused] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
-  const panelRef = useRef<HTMLDivElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
   const barRef = useRef<HTMLDivElement>(null);
   const addItemMutation = useAddItem();
 
@@ -55,8 +55,6 @@ export function QuickAddBar({
         isInList: pendingProductIds.has(p.productId),
       }));
   }, [query, products, pendingProductIds]);
-
-  const showPanel = isFocused && (barcodelessSuggestions.length > 0 || query.length >= 2);
 
   const handleQuickAdd = useCallback(
     async (product: ProductDocument) => {
@@ -108,10 +106,12 @@ export function QuickAddBar({
     setIsFocused(false);
   };
 
+  const showSearchDropdown = isFocused && query.length >= 2;
+
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (
-        panelRef.current?.contains(e.target as Node) ||
+        dropdownRef.current?.contains(e.target as Node) ||
         barRef.current?.contains(e.target as Node)
       ) {
         return;
@@ -128,93 +128,86 @@ export function QuickAddBar({
     };
   }, [isFocused]);
 
-  const showChips = isFocused && !query && barcodelessSuggestions.length > 0;
-  const showSearch = isFocused && query.length >= 2;
-
   return (
     <div className="fixed bottom-0 left-0 right-0 z-20">
-      {showPanel && (
+      {showSearchDropdown && (
         <div
-          ref={panelRef}
+          ref={dropdownRef}
           className="mx-auto max-w-lg px-4 pb-1 animate-in slide-in-from-bottom-2 duration-200"
         >
           <div className="bg-background border rounded-xl shadow-lg overflow-hidden">
-            {showChips && (
-              <div className="p-3 space-y-2">
-                <p className="text-xs font-medium text-muted-foreground px-1">
-                  Quick add
-                </p>
-                <div className="flex flex-wrap gap-1.5">
-                  {barcodelessSuggestions.map((product) => (
-                    <button
-                      key={product.productId}
-                      type="button"
-                      className="inline-flex items-center gap-1 px-3 py-1.5 text-sm bg-secondary hover:bg-secondary/80 rounded-full transition-colors active:scale-95"
-                      onClick={() => handleQuickAdd(product)}
-                      disabled={addItemMutation.isPending}
-                    >
-                      <Plus className="h-3 w-3 opacity-50" />
-                      {product.name}
-                    </button>
-                  ))}
+            <div className="max-h-52 overflow-y-auto">
+              {searchResults.length === 0 ? (
+                <div className="px-4 py-3 text-sm text-muted-foreground">
+                  No products found — press Enter to add manually
                 </div>
-              </div>
-            )}
-
-            {showSearch && (
-              <div className="max-h-52 overflow-y-auto">
-                {searchResults.length === 0 ? (
-                  <div className="px-4 py-3 text-sm text-muted-foreground">
-                    No products found — press Enter to add manually
-                  </div>
-                ) : (
-                  searchResults.map((product) => (
-                    <button
-                      key={product.productId}
-                      type="button"
-                      className={`w-full flex items-center justify-between px-4 py-2.5 text-left text-sm transition-colors ${
-                        product.isInList
-                          ? 'opacity-50 cursor-default'
-                          : 'hover:bg-accent active:bg-accent/80'
-                      }`}
-                      onClick={() => handleSearchResultTap(product)}
-                      disabled={addItemMutation.isPending}
-                    >
-                      <div className="flex-1 min-w-0">
-                        <span className="font-medium">{product.name}</span>
-                        {product.brand && (
-                          <span className="text-muted-foreground ml-1.5">
-                            — {product.brand}
-                          </span>
-                        )}
-                      </div>
-                      {product.isInList ? (
-                        <Badge
-                          variant="secondary"
-                          className="ml-2 shrink-0 text-xs gap-1"
-                        >
-                          <Check className="h-3 w-3" />
-                          In list
-                        </Badge>
-                      ) : (
-                        <Plus className="h-4 w-4 text-muted-foreground ml-2 shrink-0" />
+              ) : (
+                searchResults.map((product) => (
+                  <button
+                    key={product.productId}
+                    type="button"
+                    className={`w-full flex items-center justify-between px-4 py-2.5 text-left text-sm transition-colors ${
+                      product.isInList
+                        ? 'opacity-50 cursor-default'
+                        : 'hover:bg-accent active:bg-accent/80'
+                    }`}
+                    onClick={() => handleSearchResultTap(product)}
+                    disabled={addItemMutation.isPending}
+                  >
+                    <div className="flex-1 min-w-0">
+                      <span className="font-medium">{product.name}</span>
+                      {product.brand && (
+                        <span className="text-muted-foreground ml-1.5">
+                          — {product.brand}
+                        </span>
                       )}
-                    </button>
-                  ))
-                )}
-              </div>
-            )}
+                    </div>
+                    {product.isInList ? (
+                      <Badge
+                        variant="secondary"
+                        className="ml-2 shrink-0 text-xs gap-1"
+                      >
+                        <Check className="h-3 w-3" />
+                        In list
+                      </Badge>
+                    ) : (
+                      <Plus className="h-4 w-4 text-muted-foreground ml-2 shrink-0" />
+                    )}
+                  </button>
+                ))
+              )}
+            </div>
           </div>
         </div>
       )}
 
       <div
         ref={barRef}
-        className="bg-background border-t px-4 py-3 safe-area-bottom"
+        className="bg-background border-t"
+        style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
       >
+        {barcodelessSuggestions.length > 0 && (
+          <div className="overflow-x-auto scrollbar-none px-4 pt-2.5 pb-1 max-w-lg mx-auto">
+            <div className="flex gap-1.5 w-max">
+              {barcodelessSuggestions.map((product) => (
+                <button
+                  key={product.productId}
+                  type="button"
+                  className="inline-flex items-center gap-1 px-2.5 py-1 text-xs bg-secondary hover:bg-secondary/80 rounded-full transition-colors active:scale-95 whitespace-nowrap"
+                  onClick={() => handleQuickAdd(product)}
+                  disabled={addItemMutation.isPending}
+                >
+                  <Plus className="h-3 w-3 opacity-50" />
+                  {product.name}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
         <form
           onSubmit={handleSubmit}
-          className="flex items-center gap-2 max-w-lg mx-auto"
+          className="flex items-center gap-2 max-w-lg mx-auto px-4 py-2.5"
         >
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
