@@ -28,11 +28,32 @@ const BARCODE_FORMATS = [
   Html5QrcodeSupportedFormats.UPC_A,
   Html5QrcodeSupportedFormats.UPC_E,
   Html5QrcodeSupportedFormats.CODE_128,
-  Html5QrcodeSupportedFormats.CODE_39,
-  Html5QrcodeSupportedFormats.CODE_93,
-  Html5QrcodeSupportedFormats.ITF,
-  Html5QrcodeSupportedFormats.QR_CODE,
 ];
+
+function applyOptimalCameraConstraints() {
+  try {
+    const videoEl = document.querySelector<HTMLVideoElement>(
+      `#${SCANNER_ID} video`
+    );
+    const track = (videoEl?.srcObject as MediaStream)?.getVideoTracks()[0];
+    if (!track) return;
+
+    const capabilities = track.getCapabilities?.() as MediaTrackCapabilities & {
+      focusMode?: string[];
+    };
+
+    const advanced: Record<string, unknown>[] = [];
+    if (capabilities?.focusMode?.includes('continuous')) {
+      advanced.push({ focusMode: 'continuous' });
+    }
+
+    if (advanced.length > 0) {
+      track.applyConstraints({ advanced } as MediaTrackConstraints);
+    }
+  } catch {
+    // Focus constraints not supported
+  }
+}
 
 export function BarcodeScannerDialog({
   open,
@@ -46,6 +67,11 @@ export function BarcodeScannerDialog({
   const [cameras, setCameras] = useState<{ id: string; label: string }[]>([]);
   const [activeCameraIndex, setActiveCameraIndex] = useState(0);
   const mountedRef = useRef(true);
+
+  const onScanRef = useRef(onScan);
+  onScanRef.current = onScan;
+  const onOpenChangeRef = useRef(onOpenChange);
+  onOpenChangeRef.current = onOpenChange;
 
   const stopScanner = useCallback(async () => {
     const scanner = scannerRef.current;
@@ -64,14 +90,17 @@ export function BarcodeScannerDialog({
     scannerRef.current = null;
   }, []);
 
-  const startWithCamera = useCallback(
-    async (cameraId: string) => {
+  const startScanner = useCallback(
+    async (cameraIdOrConfig: string | { facingMode: string }) => {
       setStarting(true);
       setError(null);
 
       try {
         await stopScanner();
-        await new Promise((r) => setTimeout(r, 100));
+
+        if (typeof cameraIdOrConfig === 'string') {
+          await new Promise((r) => setTimeout(r, 100));
+        }
 
         const el = document.getElementById(SCANNER_ID);
         if (!el) {
@@ -87,23 +116,25 @@ export function BarcodeScannerDialog({
 
         const containerWidth = el.offsetWidth || 350;
         const qrboxWidth = Math.min(containerWidth - 16, 380);
-        const qrboxHeight = Math.round(qrboxWidth * 0.4);
+        const qrboxHeight = Math.round(qrboxWidth * 0.45);
 
         await scanner.start(
-          cameraId,
+          cameraIdOrConfig,
           {
-            fps: 15,
+            fps: 20,
             qrbox: { width: qrboxWidth, height: qrboxHeight },
             aspectRatio: 1.333,
-            disableFlip: false,
+            disableFlip: true,
           },
           (decodedText) => {
             if (!mountedRef.current) return;
-            onScan(decodedText);
-            onOpenChange(false);
+            onScanRef.current(decodedText);
+            onOpenChangeRef.current(false);
           },
           () => {}
         );
+
+        applyOptimalCameraConstraints();
 
         if (mountedRef.current) setStarting(false);
       } catch (err) {
@@ -118,7 +149,7 @@ export function BarcodeScannerDialog({
         }
       }
     },
-    [onScan, onOpenChange, stopScanner]
+    [stopScanner]
   );
 
   useEffect(() => {
@@ -128,52 +159,48 @@ export function BarcodeScannerDialog({
     setStarting(true);
     setError(null);
 
-    const timeout = setTimeout(async () => {
+    const init = async () => {
+      try {
+        await startScanner({ facingMode: 'environment' });
+      } catch {
+        if (mountedRef.current) {
+          setError(
+            'Could not access camera. Please allow camera permissions in your browser settings.'
+          );
+          setStarting(false);
+        }
+        return;
+      }
+
       try {
         const devices = await Html5Qrcode.getCameras();
-        if (!mountedRef.current) return;
-
-        if (devices.length === 0) {
-          setError('No camera found on this device.');
-          setStarting(false);
-          return;
-        }
-
+        if (!mountedRef.current || devices.length === 0) return;
         setCameras(devices);
-
         const rearIndex = devices.findIndex(
           (d) =>
             d.label.toLowerCase().includes('back') ||
             d.label.toLowerCase().includes('rear') ||
             d.label.toLowerCase().includes('environment')
         );
-        const selectedIndex = rearIndex >= 0 ? rearIndex : 0;
-        setActiveCameraIndex(selectedIndex);
-
-        await startWithCamera(devices[selectedIndex].id);
-      } catch (err) {
-        if (mountedRef.current) {
-          console.error('Camera enumeration error:', err);
-          setError(
-            'Could not access camera. Please allow camera permissions in your browser settings.'
-          );
-          setStarting(false);
-        }
+        setActiveCameraIndex(rearIndex >= 0 ? rearIndex : 0);
+      } catch {
+        // Camera list unavailable — switch button stays hidden
       }
-    }, 500);
+    };
+
+    init();
 
     return () => {
       mountedRef.current = false;
-      clearTimeout(timeout);
       stopScanner();
     };
-  }, [open, startWithCamera, stopScanner]);
+  }, [open, startScanner, stopScanner]);
 
   const handleSwitchCamera = async () => {
     if (cameras.length <= 1) return;
     const nextIndex = (activeCameraIndex + 1) % cameras.length;
     setActiveCameraIndex(nextIndex);
-    await startWithCamera(cameras[nextIndex].id);
+    await startScanner(cameras[nextIndex].id);
   };
 
   return (
