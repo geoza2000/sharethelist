@@ -21,6 +21,7 @@ import {
   QuickAddBar,
 } from '@/components/shopping';
 import type { ShoppingItemDocument } from '@supermarket-list/shared';
+import { InstallPWABanner } from '@/components/pwa';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import {
@@ -251,6 +252,10 @@ export function ShoppingListPage() {
             )}
           </div>
         )}
+
+        <div className="mt-4">
+          <InstallPWABanner variant="shopping-list" />
+        </div>
       </main>
 
       {householdId && (

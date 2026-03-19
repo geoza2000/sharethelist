@@ -10,6 +10,7 @@ import {
   MembersCard,
   DangerZoneCard,
 } from '@/components/household';
+import { InstallPWABanner } from '@/components/pwa';
 import { ArrowLeft, ArrowRightLeft } from 'lucide-react';
 
 export function HouseholdSettingsPage() {
@@ -33,6 +34,8 @@ export function HouseholdSettingsPage() {
       </header>
 
       <main className="flex-1 p-4 pb-24 max-w-lg mx-auto w-full space-y-4">
+        <InstallPWABanner variant="settings" />
+
         <HouseholdNameCard
           householdId={householdId}
           name={activeHousehold.name}
