@@ -13,6 +13,10 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['logo.svg', 'favicon.ico', 'apple-touch-icon.png'],
+      // Firebase Auth uses /__/auth/handler; SPA navigate fallback must not intercept it
+      workbox: {
+        navigateFallbackDenylist: [/^\/__\//],
+      },
       manifest: {
         name: 'Share the List',
         short_name: 'ShareTheList',
