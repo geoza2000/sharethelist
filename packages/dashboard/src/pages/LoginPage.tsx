@@ -20,12 +20,12 @@ export function LoginPage() {
       <div className="text-center space-y-6 px-6">
         <img
           src="/logo.svg"
-          alt="Supermarket List"
+          alt="Share the List"
           className="w-20 h-20 mx-auto rounded-2xl shadow-lg"
         />
         <div className="space-y-2">
           <h1 className="text-3xl font-display font-extrabold tracking-tight">
-            Supermarket List
+            Share the List
           </h1>
           <p className="text-muted-foreground">
             Sign in to manage your grocery lists

@@ -8,8 +8,8 @@ Replace all `$$VARIABLE_NAME$$` placeholders:
 
 | Variable | Description | Example |
 |----------|-------------|---------|
-| `supermarket-list` | Package name (lowercase) | `my-app` |
-| `Supermarket List` | Display name | `My App` |
+| `sharethelist` | Monorepo / root package name (lowercase) | `my-app` |
+| `Share the List` | Display name | `My App` |
 | `An app that helps you with the grocery list, from preparing to buying with the correct aisle order. Skip nothing next time you shop.` | Short description | `A great app` |
 | `$$THEME_COLOR$$` | PWA theme color | `#6366f1` |
 

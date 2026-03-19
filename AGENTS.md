@@ -1,4 +1,4 @@
-# AI Agent Instructions for supermarket-list
+# AI Agent Instructions for Share the List (`sharethelist`)
 
 This document provides guidelines for AI agents working on this Firebase monorepo project.
 

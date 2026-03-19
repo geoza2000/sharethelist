@@ -9,9 +9,9 @@ export default function Footer() {
       <div className="section-container py-10 md:py-12">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-2.5">
-            <img src="/logo.svg" alt="Supermarket List" className="w-8 h-8 rounded-lg" />
+            <img src="/logo.svg" alt="Share the List" className="w-8 h-8 rounded-lg" />
             <span className="font-display font-bold text-surface-900">
-              Supermarket List
+              Share the List
             </span>
           </div>
 
@@ -42,7 +42,7 @@ export default function Footer() {
           </nav>
 
           <p className="text-sm text-surface-900/40">
-            &copy; {year} Supermarket List
+            &copy; {year} Share the List
           </p>
         </div>
       </div>

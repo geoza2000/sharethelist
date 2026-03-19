@@ -42,7 +42,7 @@ export function InviteMembersCard({ householdId, householdName }: InviteMembersC
     try {
       await navigator.share({
         title: `Join ${householdName}`,
-        text: `Join my household "${householdName}" on Supermarket List!`,
+        text: `Join my household "${householdName}" on Share the List!`,
         url: inviteLink,
       });
     } catch (e) {

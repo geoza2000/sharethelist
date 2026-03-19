@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="packages/website/public/logo.svg" alt="Supermarket List Logo" width="120" />
+  <img src="packages/website/public/logo.svg" alt="Share the List logo" width="120" />
 </p>
 
-<h1 align="center">Supermarket List</h1>
+<h1 align="center">Share the List</h1>
 
 <p align="center">
   <strong>Never forget a grocery item again.</strong><br/>
@@ -10,15 +10,15 @@
 </p>
 
 <p align="center">
-  <a href="https://supermarket-list-app-33d.web.app">Open App</a> ·
-  <a href="https://supermarket-list-33314.web.app">Website</a>
+  <a href="https://app.sharethelist.com">Open App</a> ·
+  <a href="https://sharethelist.com">Website</a>
 </p>
 
 ---
 
-## Why Supermarket List?
+## Why Share the List?
 
-Grocery shopping is a chore everyone shares but nobody coordinates well. Supermarket List turns that chaos into a streamlined flow: one shared list, real-time sync, barcode scanning, and items automatically grouped by store so you never backtrack down the aisle.
+Grocery shopping is a chore everyone shares but nobody coordinates well. Share the List turns that chaos into a streamlined flow: one shared list, real-time sync, barcode scanning, and items automatically grouped by store so you never backtrack down the aisle.
 
 ## Features
 
@@ -63,7 +63,7 @@ Grocery shopping is a chore everyone shares but nobody coordinates well. Superma
 ## Architecture
 
 ```
-supermarket-list/
+sharethelist/
 ├── packages/
 │   ├── shared/        # Types, Zod schemas, constants (frontend + backend)
 │   ├── functions/     # Firebase Cloud Functions
@@ -76,6 +76,17 @@ supermarket-list/
 
 This is a **monorepo** with four packages. The `shared` package provides types and validation schemas consumed by both the `dashboard` (frontend) and `functions` (backend). Security is enforced at the Firestore rules level — only household members can access their data.
 
+## Custom domain (sharethelist.com)
+
+Point **DNS** at Firebase Hosting and add domains in the Firebase console:
+
+- **Marketing site** → `sharethelist.com` (website hosting target)
+- **PWA / app** → `app.sharethelist.com` (dashboard hosting target)
+
+Under **Authentication → Settings → Authorized domains**, add `sharethelist.com` and `app.sharethelist.com`. Update **OAuth redirect URIs** if you use Google Sign-In with the new origins.
+
+Until DNS is live, the default `*.web.app` URLs from Firebase still work for local and fallback URLs.
+
 ## Getting Started
 
 ### Prerequisites
@@ -87,8 +98,8 @@ This is a **monorepo** with four packages. The `shared` package provides types a
 ### Installation
 
 ```bash
-git clone https://github.com/geoza2000/supermarket.git
-cd supermarket-list
+git clone https://github.com/geoza2000/sharethelist.git
+cd sharethelist
 npm install
 ```
 

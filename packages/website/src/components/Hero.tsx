@@ -66,7 +66,7 @@ export default function Hero() {
                 {/* Screen — real app screenshot */}
                 <img
                   src={APP_SCREENSHOT}
-                  alt="Supermarket List app showing a shared shopping list grouped by store"
+                  alt="Share the List app showing a shared shopping list grouped by store"
                   className="w-full block"
                   loading="eager"
                   width={1206}

@@ -14,9 +14,10 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['logo.svg', 'favicon.ico', 'apple-touch-icon.png'],
       manifest: {
-        name: 'supermarket-list',
-        short_name: 'Supermarket',
-        description: 'An app that helps you with the grocery list, from preparing to buying with the correct aisle order. Skip nothing next time you shop.',
+        name: 'Share the List',
+        short_name: 'ShareTheList',
+        description:
+          'The smart shopping list your whole household shares. Shop in aisle order with barcode scan and offline support.',
         theme_color: '#16a34a',
         background_color: '#0f172a',
         display: 'standalone',

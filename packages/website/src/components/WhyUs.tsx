@@ -36,7 +36,7 @@ export default function WhyUs() {
       <div className="section-container relative" ref={ref}>
         <div className={`text-center max-w-2xl mx-auto mb-14 animate-on-scroll ${isVisible ? 'visible' : ''}`}>
           <span className="text-sm font-semibold text-brand-400 uppercase tracking-widest">
-            Why Supermarket List
+            Why Share the List
           </span>
           <h2 className="font-display font-extrabold text-3xl sm:text-4xl md:text-5xl tracking-tight mt-3 mb-4">
             Shopping lists,{' '}

@@ -28,9 +28,9 @@ export default function Navbar() {
     >
       <div className="section-container flex items-center justify-between h-16 md:h-20">
         <a href="#" className="flex items-center gap-2.5 group">
-          <img src="/logo.svg" alt="Supermarket List" className="w-9 h-9 rounded-xl" />
+          <img src="/logo.svg" alt="Share the List" className="w-9 h-9 rounded-xl" />
           <span className="font-display font-bold text-lg tracking-tight text-surface-900">
-            Supermarket List
+            Share the List
           </span>
         </a>
 

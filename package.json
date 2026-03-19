@@ -1,8 +1,8 @@
 {
-  "name": "supermarket-list",
+  "name": "sharethelist",
   "version": "1.0.0",
   "private": true,
-  "description": "An app that helps you with the grocery list, from preparing to buying with the correct aisle order. Skip nothing next time you shop.",
+  "description": "Share the List — the smart shopping list your whole household shares.",
   "workspaces": [
     "packages/*"
   ],

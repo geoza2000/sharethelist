@@ -20,7 +20,7 @@ const NOT_FOUND: BarcodeLookupResult = {
 };
 
 const FIELDS = 'product_name,quantity,brands';
-const HEADERS = { 'User-Agent': 'SupermarketListApp/1.0' };
+const HEADERS = { 'User-Agent': 'ShareTheListApp/1.0' };
 
 async function queryOpenFacts(
   baseUrl: string,

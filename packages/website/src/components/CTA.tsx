@@ -22,7 +22,7 @@ export default function CTA() {
               Ready to shop smarter?
             </h2>
             <p className="text-white/80 text-lg max-w-xl mx-auto mb-10 leading-relaxed">
-              Join households already using Supermarket List. It&apos;s free, instant, and works on
+              Join households already using Share the List. It&apos;s free, instant, and works on
               every device.
             </p>
             <a
