@@ -7,11 +7,11 @@ import {
   getHouseholdById,
   isHouseholdMember,
 } from '../services';
-import { requireAllowedUser } from '../utils/requireAllowedUser';
-import { AUTH_CALLABLE_CONFIG } from '../config';
+import { requireAuth } from '../utils/requireAllowedUser';
+import { CALLABLE_CONFIG } from '../config';
 
-export const acceptInvitationFn = onCall(AUTH_CALLABLE_CONFIG, async (request) => {
-  const userId = requireAllowedUser(request);
+export const acceptInvitationFn = onCall(CALLABLE_CONFIG, async (request) => {
+  const userId = requireAuth(request);
 
   const parsed = AcceptInvitationSchema.safeParse(request.data);
   if (!parsed.success) {
