@@ -62,24 +62,24 @@ export function ProductsPage() {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      <header className="sticky top-0 z-10 bg-background border-b px-4 py-3">
+      <header className="sticky top-0 z-10 bg-primary text-primary-foreground px-4 py-3">
         <div className="flex items-center gap-2 max-w-lg mx-auto">
-          <Button variant="ghost" size="icon" onClick={() => navigate('/')}>
+          <Button variant="ghost" size="icon" className="text-primary-foreground hover:bg-white/15 hover:text-primary-foreground" onClick={() => navigate('/')}>
             <ArrowLeft className="h-4 w-4" />
           </Button>
-          <h1 className="font-bold text-lg">Products</h1>
+          <h1 className="font-display font-bold text-lg">Products</h1>
           <div className="ml-auto flex items-center gap-2">
             {showWizardButton && (
               <Button
-                variant="outline"
                 size="sm"
+                className="bg-white/20 text-primary-foreground hover:bg-white/30 border-0"
                 onClick={() => setWizardOpen(true)}
               >
                 <Wand2 className="h-4 w-4 mr-1.5" />
                 Assign
               </Button>
             )}
-            <Badge variant="secondary" className="text-xs">
+            <Badge variant="secondary" className="text-xs bg-white/20 text-primary-foreground border-0">
               {products.length}
             </Badge>
           </div>

@@ -137,14 +137,14 @@ export function ShoppingListPage() {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      <header className="sticky top-0 z-10 bg-background border-b px-4 py-3">
+      <header className="sticky top-0 z-10 bg-primary text-primary-foreground px-4 py-3">
         <div className="flex items-center justify-between max-w-lg mx-auto">
           <button
             className="text-left"
             onClick={() => navigate('/household/select')}
           >
-            <h1 className="font-bold text-lg">{activeHousehold?.name}</h1>
-            <p className="text-xs text-muted-foreground">
+            <h1 className="font-display font-bold text-lg">{activeHousehold?.name}</h1>
+            <p className="text-xs opacity-75">
               {pendingItems.length} item{pendingItems.length !== 1 ? 's' : ''} to buy
             </p>
           </button>
@@ -153,20 +153,20 @@ export function ShoppingListPage() {
               <Button
                 variant="ghost"
                 size="sm"
-                className="text-xs"
+                className="text-xs text-primary-foreground hover:bg-white/15 hover:text-primary-foreground"
                 onClick={() => setShowCloseAll(true)}
               >
                 <CheckCircle2 className="mr-1 h-3.5 w-3.5" />
                 Close All
               </Button>
             )}
-            <Button variant="ghost" size="icon" onClick={() => navigate('/products')}>
+            <Button variant="ghost" size="icon" className="text-primary-foreground hover:bg-white/15 hover:text-primary-foreground" onClick={() => navigate('/products')}>
               <Package className="h-4 w-4" />
             </Button>
-            <Button variant="ghost" size="icon" onClick={() => navigate('/shops')}>
+            <Button variant="ghost" size="icon" className="text-primary-foreground hover:bg-white/15 hover:text-primary-foreground" onClick={() => navigate('/shops')}>
               <Store className="h-4 w-4" />
             </Button>
-            <Button variant="ghost" size="icon" onClick={() => navigate('/household/settings')}>
+            <Button variant="ghost" size="icon" className="text-primary-foreground hover:bg-white/15 hover:text-primary-foreground" onClick={() => navigate('/household/settings')}>
               <Settings className="h-4 w-4" />
             </Button>
           </div>

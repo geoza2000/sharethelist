@@ -23,12 +23,12 @@ export function HouseholdSettingsPage() {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      <header className="sticky top-0 z-10 bg-background border-b px-4 py-3">
+      <header className="sticky top-0 z-10 bg-primary text-primary-foreground px-4 py-3">
         <div className="flex items-center gap-3 max-w-lg mx-auto">
-          <Button variant="ghost" size="icon" onClick={() => navigate('/')}>
+          <Button variant="ghost" size="icon" className="text-primary-foreground hover:bg-white/15 hover:text-primary-foreground" onClick={() => navigate('/')}>
             <ArrowLeft className="h-5 w-5" />
           </Button>
-          <h1 className="font-bold text-lg">Household Settings</h1>
+          <h1 className="font-display font-bold text-lg">Household Settings</h1>
         </div>
       </header>
 
