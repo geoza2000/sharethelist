@@ -69,6 +69,10 @@ export function HouseholdSettingsPage() {
           householdName={activeHousehold.name}
           isOwner={isOwner}
         />
+
+        <p className="text-center text-xs text-muted-foreground pt-4">
+          v{__APP_VERSION__}
+        </p>
       </main>
     </div>
   );
