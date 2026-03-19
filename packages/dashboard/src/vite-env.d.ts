@@ -31,6 +31,10 @@ declare class BarcodeDetector {
   detect(source: ImageBitmapSource): Promise<DetectedBarcode[]>;
 }
 
+interface Window {
+  BarcodeDetector?: typeof BarcodeDetector;
+}
+
 interface ImportMetaEnv {
   readonly VITE_FIREBASE_API_KEY: string;
   readonly VITE_FIREBASE_AUTH_DOMAIN: string;

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
+import { BarcodeDetector } from 'barcode-detector';
 import {
   ResponsiveDialog,
   ResponsiveDialogContent,
@@ -59,12 +60,6 @@ export function BarcodeScannerDialog({
     setError(null);
 
     try {
-      if (!('BarcodeDetector' in window)) {
-        throw new Error(
-          'Barcode scanning is not supported in this browser. Please use Safari or Chrome.'
-        );
-      }
-
       const detector = new BarcodeDetector({ formats: BARCODE_FORMATS });
 
       const stream = await navigator.mediaDevices.getUserMedia({
