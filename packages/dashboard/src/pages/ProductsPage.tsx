@@ -91,7 +91,7 @@ export function ProductsPage() {
           </div>
         ) : filtered.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-[60vh] text-center px-4">
-            <Package className="h-16 w-16 text-muted-foreground/30 mb-4" />
+            <Package className="h-16 w-16 text-muted-foreground mb-4" />
             <h2 className="text-xl font-semibold mb-2">
               {searchQuery ? 'No matches' : 'No products yet'}
             </h2>

@@ -138,7 +138,7 @@ export function ShopsPage() {
           </div>
         ) : shops.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-[60vh] text-center">
-            <Store className="h-16 w-16 text-muted-foreground/30 mb-4" />
+            <Store className="h-16 w-16 text-muted-foreground mb-4" />
             <h2 className="text-xl font-semibold mb-2">No shops yet</h2>
             <p className="text-muted-foreground mb-6">
               Add shops to group your items and track visits

@@ -175,7 +175,7 @@ export function ShoppingListPage() {
           </div>
         ) : items.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-[60vh] text-center">
-            <ShoppingCart className="h-16 w-16 text-muted-foreground/30 mb-4" />
+            <ShoppingCart className="h-16 w-16 text-muted-foreground mb-4" />
             <h2 className="text-xl font-semibold mb-2">No items yet</h2>
             <p className="text-muted-foreground mb-6">
               Scan a barcode or type manually to add items
