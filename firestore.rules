@@ -3,35 +3,56 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     
-    // Helper: Check if user is authenticated
     function isAuthenticated() {
       return request.auth != null;
     }
     
-    // Helper: Check if user owns the resource
     function isOwner(userId) {
       return isAuthenticated() && request.auth.uid == userId;
     }
 
+    function isHouseholdMember(householdId) {
+      return isAuthenticated() &&
+        request.auth.uid in get(/databases/$(database)/documents/households/$(householdId)).data.memberIds;
+    }
+
     // Users collection
-    // - Users can read their own document
-    // - User documents are created/updated by backend (Cloud Functions with Admin SDK)
-    // - Client can only update settings.theme field
     match /users/{userId} {
       allow read: if isOwner(userId);
-      
-      // User documents are created by backend via getUserDetails callable function
       allow create: if false;
-      
-      // Users can only update their settings (theme preference)
-      // All other fields (notifications, lastLoginAt, etc.) are managed by backend
       allow update: if isOwner(userId) && 
         request.resource.data.diff(resource.data).affectedKeys().hasOnly([
           'settings',
+          'activeHouseholdId',
           'updatedAt'
         ]);
-      
       allow delete: if false;
+    }
+
+    // Households collection - reads for members, writes via Cloud Functions
+    match /households/{householdId} {
+      allow read: if isHouseholdMember(householdId);
+      allow create, update, delete: if false;
+
+      // Shops subcollection - full access for household members
+      match /shops/{shopId} {
+        allow read, write: if isHouseholdMember(householdId);
+      }
+
+      // Products subcollection - full access for household members
+      match /products/{productId} {
+        allow read, write: if isHouseholdMember(householdId);
+      }
+
+      // Items subcollection - full access for household members
+      match /items/{itemId} {
+        allow read, write: if isHouseholdMember(householdId);
+      }
+    }
+
+    // Invitations - all access through Cloud Functions (Admin SDK)
+    match /invitations/{invitationId} {
+      allow read, write: if false;
     }
   }
 }

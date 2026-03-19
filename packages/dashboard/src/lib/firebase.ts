@@ -1,5 +1,5 @@
 import { initializeApp, getApps, FirebaseApp } from 'firebase/app';
-import { getFirestore, Firestore, connectFirestoreEmulator } from 'firebase/firestore';
+import { getFirestore, Firestore, connectFirestoreEmulator, doc, getDoc } from 'firebase/firestore';
 import { getAuth, Auth, GoogleAuthProvider } from 'firebase/auth';
 import { getFunctions, Functions, httpsCallable, connectFunctionsEmulator } from 'firebase/functions';
 import { getMessaging, Messaging, getToken, onMessage } from 'firebase/messaging';
@@ -82,10 +82,25 @@ export { app, db, auth, functions, appCheck, messaging, googleProvider, USE_EMUL
 // Collection names
 export const Collections = {
   USERS: 'users',
+  HOUSEHOLDS: 'households',
+  INVITATIONS: 'invitations',
+} as const;
+
+// Subcollection names
+export const Subcollections = {
+  SHOPS: 'shops',
+  PRODUCTS: 'products',
+  ITEMS: 'items',
 } as const;
 
 // Callable functions
-import type { UserProfile } from '@supermarket-list/shared';
+import type {
+  UserProfile,
+  HouseholdDocument,
+  HouseholdMember,
+  InvitationDetails,
+  CloseShoppingSessionResult,
+} from '@supermarket-list/shared';
 
 export const callGetUserDetails = httpsCallable<
   { email?: string; displayName?: string; photoUrl?: string },
@@ -101,6 +116,82 @@ export const callSendTestNotification = httpsCallable<
   { currentToken?: string },
   { success: boolean; tokenFound: boolean; totalTokens: number; successCount: number; failureCount: number }
 >(functions, 'sendTestNotification');
+
+// Household functions
+export const callCreateHousehold = httpsCallable<
+  { name: string },
+  { householdId: string; name: string; ownerId: string; memberIds: string[]; plan: string; createdAt: string }
+>(functions, 'createHousehold');
+
+export async function getHouseholdDoc(householdId: string): Promise<HouseholdDocument | null> {
+  const snap = await getDoc(doc(db, Collections.HOUSEHOLDS, householdId));
+  if (!snap.exists()) return null;
+  return snap.data() as HouseholdDocument;
+}
+
+export const callGetHouseholdMembers = httpsCallable<
+  { householdId: string },
+  { members: HouseholdMember[] }
+>(functions, 'getHouseholdMembers');
+
+export const callUpdateHousehold = httpsCallable<
+  { householdId: string; name: string },
+  { success: boolean }
+>(functions, 'updateHousehold');
+
+export const callLeaveHousehold = httpsCallable<
+  { householdId: string },
+  { deleted: boolean }
+>(functions, 'leaveHousehold');
+
+export const callSetActiveHousehold = httpsCallable<
+  { householdId: string },
+  { success: boolean }
+>(functions, 'setActiveHousehold');
+
+// Invitation functions
+export const callCreateInvitation = httpsCallable<
+  { householdId: string; maxUses?: number; expiryHours?: number },
+  { invitationId: string; token: string; expiresAt: string; maxUses: number }
+>(functions, 'createInvitation');
+
+export const callGetInvitationDetails = httpsCallable<
+  { token: string },
+  InvitationDetails
+>(functions, 'getInvitationDetails');
+
+export const callAcceptInvitation = httpsCallable<
+  { token: string },
+  { householdId: string; householdName: string; alreadyMember: boolean }
+>(functions, 'acceptInvitation');
+
+export const callRevokeInvitation = httpsCallable<
+  { invitationId: string },
+  { success: boolean }
+>(functions, 'revokeInvitation');
+
+// Shop functions
+export const callManageShop = httpsCallable<
+  { action: string; data: Record<string, unknown> },
+  Record<string, unknown>
+>(functions, 'manageShop');
+
+// Product functions
+export const callManageProduct = httpsCallable<
+  { action: string; data: Record<string, unknown> },
+  Record<string, unknown>
+>(functions, 'manageProduct');
+
+// Shopping list functions
+export const callManageShoppingItem = httpsCallable<
+  { action: string; data: Record<string, unknown> },
+  Record<string, unknown>
+>(functions, 'manageShoppingItem');
+
+export const callCloseShoppingSession = httpsCallable<
+  { householdId: string; shopId?: string | null; closeAll?: boolean },
+  CloseShoppingSessionResult
+>(functions, 'closeShoppingSession');
 
 // FCM Token management
 export async function requestNotificationPermission(): Promise<string | null> {

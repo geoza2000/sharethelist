@@ -9,13 +9,10 @@ import { doc, onSnapshot } from 'firebase/firestore';
 import { auth, db, googleProvider, callGetUserDetails, Collections } from '@/lib/firebase';
 
 export interface UserProfile {
-  // Core identity
   userId: string;
-  // From Firebase Auth SDK (not stored in DB)
   email: string;
   displayName: string;
   photoUrl: string | null;
-  // From Firestore
   settings: {
     theme: 'light' | 'dark' | 'system';
   };
@@ -23,6 +20,8 @@ export interface UserProfile {
     enabled: boolean;
     tokenCount: number;
   };
+  householdIds: string[];
+  activeHouseholdId: string | null;
   lastLoginAt: string | null;
 }
 
@@ -58,18 +57,17 @@ export function useAuth(): UseAuthResult {
           // Merge Firebase Auth data with Firestore data
           // Note: email, displayName and photoUrl come from Firebase Auth, NOT stored in DB
           const userProfile: UserProfile = {
-            // Core identity
             userId: firebaseUser.uid,
-            // From Firebase Auth SDK (not stored in DB)
             email: firebaseUser.email || '',
             displayName: firebaseUser.displayName || 'User',
             photoUrl: firebaseUser.photoURL,
-            // From Firestore
             settings: data.settings || { theme: 'system' },
             notifications: {
               enabled: (data.notifications?.fcmTokens?.length || 0) > 0,
               tokenCount: data.notifications?.fcmTokens?.length || 0,
             },
+            householdIds: data.householdIds || [],
+            activeHouseholdId: data.activeHouseholdId || null,
             lastLoginAt: data.lastLoginAt || null,
           };
           setProfile(userProfile);

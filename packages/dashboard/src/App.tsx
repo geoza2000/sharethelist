@@ -3,39 +3,75 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from '@/lib/queryClient';
 import { AuthProvider, useAuthContext } from '@/contexts/AuthContext';
 import { LoginPage } from '@/pages/LoginPage';
-import { DashboardPage } from '@/pages/DashboardPage';
-import { Loader2 } from 'lucide-react';
+import { ShoppingListPage } from '@/pages/ShoppingListPage';
+import { ShopsPage } from '@/pages/ShopsPage';
+import { ProductsPage } from '@/pages/ProductsPage';
+import { HouseholdSelectPage } from '@/pages/HouseholdSelectPage';
+import { CreateHouseholdPage } from '@/pages/CreateHouseholdPage';
+import { JoinHouseholdPage } from '@/pages/JoinHouseholdPage';
+import { HouseholdSettingsPage } from '@/pages/HouseholdSettingsPage';
 import { Toaster } from '@/components/ui/toaster';
 import { FcmTokenSync, NotificationListener, NotificationPrompt } from '@/components/notifications';
-
-// Protected route wrapper
-function ProtectedRoute({ children }: { children: React.ReactNode }) {
-  const { user, loading } = useAuthContext();
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-      </div>
-    );
-  }
-
-  if (!user) {
-    return <Navigate to="/login" replace />;
-  }
-
-  return <>{children}</>;
-}
+import { ProtectedRoute, HouseholdGuard } from '@/components/guards';
 
 function AppRoutes() {
   return (
     <Routes>
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/join/:token" element={<JoinHouseholdPage />} />
+      <Route
+        path="/household/select"
+        element={
+          <ProtectedRoute>
+            <HouseholdSelectPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/household/new"
+        element={
+          <ProtectedRoute>
+            <CreateHouseholdPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/household/settings"
+        element={
+          <ProtectedRoute>
+            <HouseholdGuard>
+              <HouseholdSettingsPage />
+            </HouseholdGuard>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/products"
+        element={
+          <ProtectedRoute>
+            <HouseholdGuard>
+              <ProductsPage />
+            </HouseholdGuard>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/shops"
+        element={
+          <ProtectedRoute>
+            <HouseholdGuard>
+              <ShopsPage />
+            </HouseholdGuard>
+          </ProtectedRoute>
+        }
+      />
       <Route
         path="/"
         element={
           <ProtectedRoute>
-            <DashboardPage />
+            <HouseholdGuard>
+              <ShoppingListPage />
+            </HouseholdGuard>
           </ProtectedRoute>
         }
       />
@@ -44,13 +80,10 @@ function AppRoutes() {
   );
 }
 
-// Notification and FCM components wrapper - only active when user is logged in
 function AuthenticatedFcmComponents() {
   const { user } = useAuthContext();
-  
-  // Only active when user is logged in
   if (!user) return null;
-  
+
   return (
     <>
       <NotificationListener />

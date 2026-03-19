@@ -16,6 +16,8 @@ export interface User {
   userId: string;
   settings: UserSettings;
   notifications: NotificationSettings;
+  householdIds: string[];
+  activeHouseholdId: string | null;
   lastLoginAt: Date;
   createdAt: Date;
   updatedAt: Date;
@@ -26,6 +28,8 @@ export interface UserDocument {
   userId: string;
   settings: UserSettings;
   notifications: NotificationSettings;
+  householdIds: string[];
+  activeHouseholdId: string | null;
   lastLoginAt: string;
   createdAt: string;
   updatedAt: string;
@@ -45,6 +49,8 @@ export interface UserProfile {
     enabled: boolean;
     tokenCount: number;
   };
+  householdIds: string[];
+  activeHouseholdId: string | null;
   lastLoginAt: string;
 }
 
@@ -75,6 +81,8 @@ export function documentToUser(doc: UserDocument): User {
   return {
     ...doc,
     notifications: doc.notifications || getDefaultNotificationSettings(),
+    householdIds: doc.householdIds || [],
+    activeHouseholdId: doc.activeHouseholdId || null,
     lastLoginAt: new Date(doc.lastLoginAt),
     createdAt: new Date(doc.createdAt),
     updatedAt: new Date(doc.updatedAt),
@@ -99,6 +107,8 @@ export function userToProfile(user: User): UserProfile {
       enabled: user.notifications.fcmTokens.length > 0,
       tokenCount: user.notifications.fcmTokens.length,
     },
+    householdIds: user.householdIds,
+    activeHouseholdId: user.activeHouseholdId,
     lastLoginAt: user.lastLoginAt.toISOString(),
   };
 }

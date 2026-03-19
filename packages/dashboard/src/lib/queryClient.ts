@@ -53,6 +53,13 @@ export const queryKeys = {
   //   detail: (id: string) => [...queryKeys.items.all, id, 'detail'] as const,
   // },
 
+  // Household queries
+  household: {
+    all: ['household'] as const,
+    members: (householdId: string) =>
+      [...queryKeys.household.all, householdId, 'members'] as const,
+  },
+
   // Health check
   health: {
     all: ['health'] as const,

@@ -41,6 +41,8 @@ export async function createUser(input: CreateUserInput): Promise<User> {
     userId: input.userId,
     settings: getDefaultUserSettings(),
     notifications: getDefaultNotificationSettings(),
+    householdIds: [],
+    activeHouseholdId: null,
     lastLoginAt: now,
     createdAt: now,
     updatedAt: now,

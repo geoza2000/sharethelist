@@ -28,3 +28,12 @@ export const HTTPS_CONFIG = {
   region: 'us-central1' as const,
   cors: true,
 };
+
+/**
+ * Base configuration for scheduled functions.
+ * Spread into onSchedule() along with a `schedule` field.
+ */
+export const SCHEDULER_CONFIG = {
+  region: 'us-central1' as const,
+  timeZone: 'UTC',
+};
