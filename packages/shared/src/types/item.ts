@@ -5,6 +5,7 @@ export interface ShoppingItem {
   householdId: string;
   productId: string;
   name: string;
+  brand: string | null;
   quantity: number | null;
   unit: string | null;
   shopId: string | null;
@@ -22,6 +23,7 @@ export interface ShoppingItemDocument {
   householdId: string;
   productId: string;
   name: string;
+  brand: string | null;
   quantity: number | null;
   unit: string | null;
   shopId: string | null;

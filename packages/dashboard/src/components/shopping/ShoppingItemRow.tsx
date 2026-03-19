@@ -78,6 +78,11 @@ export function ShoppingItemRow({
             </span>
           )}
         </div>
+        {item.brand && (
+          <span className="text-xs text-muted-foreground truncate">
+            {item.brand}
+          </span>
+        )}
         {(item.category || shop) && (
           <div className="flex items-center gap-1.5 mt-0.5">
             {item.category && (

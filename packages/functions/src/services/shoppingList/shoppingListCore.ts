@@ -34,6 +34,7 @@ export async function addItem(
   const now = new Date();
 
   let productId = input.productId;
+  let brand = input.brand ?? null;
   let shopId = input.shopId ?? null;
   let category = input.category ?? null;
   let quantity = input.quantity ?? null;
@@ -51,6 +52,7 @@ export async function addItem(
 
     if (existingProduct) {
       productId = existingProduct.productId;
+      brand = brand ?? existingProduct.brand;
       shopId = shopId ?? existingProduct.shopId;
       category = category ?? existingProduct.category;
       quantity = quantity ?? existingProduct.defaultQuantity;
@@ -77,6 +79,7 @@ export async function addItem(
     householdId: input.householdId,
     productId: productId!,
     name: input.name,
+    brand,
     quantity,
     unit,
     shopId,
