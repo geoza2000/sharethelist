@@ -38,7 +38,7 @@ function ResponsiveDialog({ open, onOpenChange, children }: ResponsiveDialogProp
   }
 
   return (
-    <Drawer open={open} onOpenChange={onOpenChange}>
+    <Drawer open={open} onOpenChange={onOpenChange} repositionInputs={false}>
       {children}
     </Drawer>
   );
