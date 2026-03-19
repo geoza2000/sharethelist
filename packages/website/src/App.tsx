@@ -1,9 +1,21 @@
-function App() {
+import Navbar from '@/components/Navbar';
+import Hero from '@/components/Hero';
+import Features from '@/components/Features';
+import HowItWorks from '@/components/HowItWorks';
+import WhyUs from '@/components/WhyUs';
+import CTA from '@/components/CTA';
+import Footer from '@/components/Footer';
+
+export default function App() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white">
-      <h1 className="text-4xl font-bold text-gray-900">Website</h1>
+    <div className="min-h-screen bg-white">
+      <Navbar />
+      <Hero />
+      <Features />
+      <HowItWorks />
+      <WhyUs />
+      <CTA />
+      <Footer />
     </div>
   );
 }
-
-export default App;
