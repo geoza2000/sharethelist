@@ -1,6 +1,9 @@
+import { useCallback, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Loader2, Pencil, Check, Minus, Plus } from 'lucide-react';
+import { Loader2, Pencil, Check } from 'lucide-react';
 import type { ShoppingItemDocument } from '@supermarket-list/shared';
+import { ShoppingItemAmountTrigger } from './ShoppingItemAmountTrigger';
+import { ShoppingItemQuantityDialog } from './ShoppingItemQuantityDialog';
 
 interface ShoppingItemRowProps {
   item: ShoppingItemDocument;
@@ -21,6 +24,13 @@ export function ShoppingItemRow({
   isToggling,
   disabled,
 }: ShoppingItemRowProps) {
+  const [qtyEditorOpen, setQtyEditorOpen] = useState(false);
+
+  const commitQuantity = useCallback(
+    (q: number) => onUpdateQuantity(item.itemId, q),
+    [item.itemId, onUpdateQuantity]
+  );
+
   const quantityLabel = [
     item.quantity != null ? String(item.quantity) : null,
     item.unit,
@@ -36,7 +46,7 @@ export function ShoppingItemRow({
   return (
     <div className="flex items-center min-h-[56px] py-2 pl-4 pr-3 gap-2">
       {/* Checkbox */}
-        <button
+      <button
         type="button"
         className="shrink-0 active:scale-95 transition-transform"
         onClick={handleToggle}
@@ -55,7 +65,7 @@ export function ShoppingItemRow({
       </button>
 
       {/* Name + badges — tapping also toggles completion */}
-        <button
+      <button
         type="button"
         className="flex-1 min-w-0 text-left active:opacity-70 transition-opacity"
         onClick={handleToggle}
@@ -82,32 +92,26 @@ export function ShoppingItemRow({
         )}
       </button>
 
-      {/* Quantity stepper */}
       {!item.completed && (
-        <div className="flex items-center gap-1 shrink-0">
-          <button
-            type="button"
-            className="inline-flex items-center justify-center h-8 w-8 rounded-md border border-input bg-background active:bg-accent disabled:opacity-40"
-            disabled={(item.quantity ?? 1) <= 1 || disabled}
-            onClick={() => {
-              const current = item.quantity ?? 1;
-              if (current > 1) onUpdateQuantity(item.itemId, current - 1);
-            }}
-          >
-            <Minus className="h-4 w-4" />
-          </button>
-          <span className="text-sm font-medium tabular-nums min-w-[2.5rem] text-center select-none">
-            {item.quantity ?? 1}{item.unit ? ` ${item.unit}` : ''}
-          </span>
-          <button
-            type="button"
-            className="inline-flex items-center justify-center h-8 w-8 rounded-md border border-input bg-background active:bg-accent disabled:opacity-40"
+        <>
+          <ShoppingItemAmountTrigger
+            quantity={item.quantity ?? 1}
+            unit={item.unit}
             disabled={disabled}
-            onClick={() => onUpdateQuantity(item.itemId, (item.quantity ?? 1) + 1)}
-          >
-            <Plus className="h-4 w-4" />
-          </button>
-        </div>
+            onOpenDialog={() => setQtyEditorOpen(true)}
+            onAdjustQuantity={commitQuantity}
+          />
+
+          <ShoppingItemQuantityDialog
+            open={qtyEditorOpen}
+            onOpenChange={setQtyEditorOpen}
+            itemName={item.name}
+            unit={item.unit}
+            quantity={item.quantity ?? 1}
+            disabled={disabled}
+            onSave={commitQuantity}
+          />
+        </>
       )}
 
       {/* Edit button */}
